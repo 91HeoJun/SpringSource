@@ -40,15 +40,21 @@
 	</bean>
 	
 	<!-- Proxy -->
-	<tx:advice id="txManager" transaction-manager="transactionManager">
+	<!-- <tx:advice id="txManager" transaction-manager="transactionManager">
 		<tx:attributes>
 			<tx:method name="addData"/>
 		</tx:attributes>
-	</tx:advice>
+	</tx:advice> -->
+	
+	<tx:annotation-driven/>
+	
+	
 
-	<aop:config>
+	<!--<aop:config>
 		<aop:pointcut expression="execution(* com.company.service..*(..))" id="pointcut"/>
 		<aop:advisor advice-ref="txManager" pointcut-ref="pointcut"/>
-	</aop:config>
+	</aop:config> -->
+	
+	<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
 
 </beans>
