@@ -3,6 +3,7 @@ package com.company.mapper;
 import com.company.domian.AuthVO;
 import com.company.domian.LogInVO;
 import com.company.domian.RegisterVO;
+import com.company.domian.changeVO;
 
 public interface RegisterMapper {
 	
@@ -14,5 +15,7 @@ public interface RegisterMapper {
 	public RegisterVO selectById(String userid);
 	public int insert(RegisterVO regVO);
 	public AuthVO selectByMember(LogInVO logVO);
-
+	public int leaveMember(LogInVO logVO);
+	public int newPwd(changeVO chanVO);
+	
 }

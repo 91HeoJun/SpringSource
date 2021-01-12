@@ -9,11 +9,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.company.domian.AuthVO;
 import com.company.domian.LogInVO;
 import com.company.domian.RegisterVO;
+import com.company.domian.changeVO;
 import com.company.service.RegisterService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -91,7 +93,6 @@ public class RegisterController {
 			log.info("사용못함");
 			return "false";
 		} 
-		
 		return "true";
 	}
 	
@@ -103,17 +104,82 @@ public class RegisterController {
 	
 	//로그인 정보(아이디, 비밀번호)를 가져오는 컨트롤러 작성
 	@PostMapping("/signin")
-	public void loginInfo(LogInVO logVO) {
+	public String loginInfo(LogInVO logVO, HttpSession session) {
 		log.info("로그인 정보 : " + logVO);
 		AuthVO auth = service.isLogin(logVO);
 		
 		log.info("authVO에 들은 값 : " + auth);
-//월욜	HttpSession session;
+		if (auth != null) {
+			session.setAttribute("auth", auth);
+			return "redirect:/";
+			
+		} else {	// userid, password가 틀려서 로그인을 못한 경우
+			return "redirect:/signin";
+		}
+	}
+	
+	// 로그아웃 - session 해제 후 index로 이동
+	@GetMapping("/logout")
+	public String logout(HttpSession session) {
+		log.info("로그아웃 진행중....");
+		session.invalidate(); // 세션에 있는 정보 모두 날리기
+//		session.removeAttribute("auth"); // 특정 세션 날리기
 		
+		return "redirect:/";
+	}
+	
+	// 회원탈퇴 폼 보여주기
+	@GetMapping("/leave")
+	public void leaveGet() {
+		log.info("회원탈퇴 폼으로 이동중....");
 	}
 	
 	
+	// 회원탈퇴 - 회원삭제 + 세션해제 후 index로 이동 
+	@PostMapping("/leave")
+	public String leavePost(LogInVO logVO, HttpSession session) {
+		log.info("회원삭제 진행중 ....");
+		
+		if (service.leave(logVO)) {
+			session.invalidate();
+			
+			return "redirect:/";
+
+		} else {	// 비밀번호가 틀린 경우
+			return "redirect:leave";
+		}
+	}
 	
+	// 회원정보 수정 폼 보여주기
+	@GetMapping("/changePwd")
+	public void changeInfo() {
+		log.info("회원정보 수정 폼 이동중 ....");
+	}
 	
+	// 회원정보 수정하기
+	@PostMapping("/changePwd")
+	public String chageNewPassword(changeVO chanVO, @SessionAttribute AuthVO auth, HttpSession session, RedirectAttributes rttr) {
+		log.info("비밀번호 수정 실행 .... 이동중인 값 : " + chanVO);
+		
+		// userid : 세션에서 가져와서 change에 담기
+//		AuthVO auth = (AuthVO) session.getAttribute("auth");	->	해당코드 대신으로 chageNewPassword메소드 상단에서 받을떄 @SessionAttribute AuthVO auth 으로 받을 수 있음.
+		chanVO.setUserid(auth.getUserid());
+		
+		// 성공 => 세션해제 후 로그인 페이지로 이동
+		if (service.updatePwd(chanVO)) {
+			log.info("비밀번호 수정 성공. 로그인 페이지로 이동");
+			session.invalidate();;
+
+			return "redirect:signin";
+		
+		// 실패 => 비밀번호 변경 폼 보여주기로 이동
+		} else {
+			rttr.addFlashAttribute("error", "비밀번호를 확인해주세요");
+			return "redirect:/member/changePwd";
+		}
+		
+
+		
+	}
 	
 }
