@@ -35,24 +35,19 @@
                 					<input class="form-control" name="writer" readonly="readonly"  value="${getBoard.writer}">                				
                 				</div>  
                 				<button type="button" class="btn btn-default" >Modify</button>     			
-                				<button type="reset" class="btn btn-info" onclick="location.href='list'">List</button>          			
+                				<button type="reset" class="btn btn-info">List</button>
                 			</form>
                 		</div>
                 	</div>
                 </div>
             </div>
+            
 <!-- 페이지 나누기를 위한 세팅값 -->
 <form action="modify" id="myform">
 	<input type="hidden" name="bno" value="${getBoard.bno}" />
+	<input type="hidden" name="pageNum" value="${cri.pageNum}" />
+	<input type="hidden" name="amount" value="${cri.amount}" />
 </form>
-<script>
-	$(function(){
-		var form = $("#myform");
-		
-		$(".btn-default").click(function(){
-			form.submit();
-		})
-		
-	})
-</script>
+
+<script src="/resources/js/read.js"></script>
 <%@include file="../includes/footer.jsp" %>       
