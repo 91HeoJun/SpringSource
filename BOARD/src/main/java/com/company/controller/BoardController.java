@@ -54,7 +54,7 @@ public class BoardController {
 		List<BoardVO> list = service.getList(cri);
 		
 		// 전체 게시물 수 요청
-		int total = service.getTotalCnt();
+		int total = service.getTotalCnt(cri);
 		model.addAttribute("list", list);
 		model.addAttribute("pageVO", new PageVO(cri, total));
 	}
@@ -76,6 +76,10 @@ public class BoardController {
 		rttr.addFlashAttribute("result", "success");
 		rttr.addAttribute("pageNum", cri.getPageNum());	// 여기서 가능한 이유는 같은 주소에서 ModelAttribute로 유지시킬 경우 사용 가능
 		rttr.addAttribute("amount", cri.getAmount());
+		rttr.addAttribute("type", cri.getType());
+		rttr.addAttribute("keyword", cri.getKeyword());
+		
+		
 		
 		return "redirect:list";
 	}
@@ -88,6 +92,8 @@ public class BoardController {
 		rttr.addFlashAttribute("result", "success");
 		rttr.addAttribute("pageNum", cri.getPageNum());
 		rttr.addAttribute("amount", cri.getAmount());
+		rttr.addAttribute("type", cri.getType());
+		rttr.addAttribute("keyword", cri.getKeyword());
 		
 		return "redirect:list";
 	}

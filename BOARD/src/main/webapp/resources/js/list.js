@@ -52,4 +52,28 @@ $(function(){
 		actionForm.submit();
 	})
 	
+	// 검색 시 동작
+	$(".btn-default").click(function(){
+		// 서치폼 가져온 후 type, keyword가 비어있는지 확인
+		// 비어있으면 메시지 띄워준 후 return
+		
+		var searchForm = $("#searchForm");
+		
+		var type = $("select[name='type']").val();
+		var keyword = $("input[name='keyword']").val();
+		
+		if(type == '') {
+			alert("타입이 비어있습니다.");
+			return false;
+		} else if(keyword == '') {
+			alert("검색어가 비어있습니다.");
+			return false;			
+		}
+		
+		// 검색 시 첫 페이지를 보여주기 위해 페이지 번호 변경
+		searchForm.find("input[name=pageNum]").val("1");
+		searchForm.submit();
+	})
+	
+	
 })

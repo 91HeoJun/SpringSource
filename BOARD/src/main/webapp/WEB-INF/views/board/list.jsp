@@ -53,14 +53,19 @@
                             		<form action="" id="searchForm">
                             			<select name="type" id="">
                             				<option value=""> ----- </option>
-                            				<option value="T"> 제목 </option>
-                            				<option value="C"> 내용 </option>
-                            				<option value="W"> 작성자 </option>
-                            				<option value="TC"> 제목 or 내용</option>
-                            				<option value="TCW"> 제목 or 작성자 </option>
+                            				<option value="T"<c:out value="${pageVO.cri.type=='T'?'selected':''}"/>> 제목 </option>
+                            				<option value="C"<c:out value="${pageVO.cri.type=='C'?'selected':''}"/>> 내용 </option>
+                            				<option value="W"<c:out value="${pageVO.cri.type=='W'?'selected':''}"/>> 작성자 </option>
+                            				<option value="TC"<c:out value="${pageVO.cri.type=='TC'?'selected':''}"/>> 제목 or 내용</option>
+                            				<option value="TCW"<c:out value="${pageVO.cri.type=='TCW'?'selected':''}"/>> 제목 or 작성자 </option>
                             			</select>
-										<input type="text" id="keyword" />
-										<button type="button">검색</button>       		
+										<input type="text" id="keyword" name=keyword value="${pageVO.cri.keyword}" />
+										<input type="hidden" name="pageNum" value="${pageVO.cri.pageNum}" />
+										<input type="hidden" name="amount" value="${pageVO.cri.amount}" />
+
+
+
+										<button type="button" class="btn btn-default">검색</button>       		
                             		</form>
                             		
                             	   </div>
@@ -106,6 +111,8 @@
 	<form action="" id="actionForm">
 		<input type="hidden" name="pageNum" value="${pageVO.cri.pageNum}" />
 		<input type="hidden" name="amount" value="${pageVO.cri.amount}" />
+		<input type="hidden" name="type" value="${pageVO.cri.type}" />
+		<input type="hidden" name="keyword" value="${pageVO.cri.keyword}" />
 	</form>
 
 

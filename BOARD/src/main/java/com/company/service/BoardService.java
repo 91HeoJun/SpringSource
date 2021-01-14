@@ -17,5 +17,5 @@ public interface BoardService {
 	public BoardVO getRow(int bno);
 	
 	// 전체 게시물 수
-	public int getTotalCnt();
+	public int getTotalCnt(Criteria cri);
 }
