@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -61,6 +62,22 @@ public class BookController {
 		return service.updateBook(vo)?new ResponseEntity<String>("Update Complete", HttpStatus.OK)
 				   : new ResponseEntity<String>("Update Fail", HttpStatus.BAD_REQUEST);
 		}
+	
+	@PostMapping("/new")
+	public ResponseEntity<String> insert(@RequestBody BookVO vo) {
+		log.info("삽입 실행중 ...." + vo);
+		
+		return service.insertBook(vo)?new ResponseEntity<String>("Insert Complet", HttpStatus.OK)
+				: new ResponseEntity<String>("Insert Fail", HttpStatus.BAD_REQUEST);
+	}
+	
+	@PostMapping("/insert")
+	public ResponseEntity<String> insertPost(BookVO vo) {
+		log.info("삽입 실행중 ...." + vo);
+		
+		return service.insertBook(vo)?new ResponseEntity<String>("Insert Complet", HttpStatus.OK)
+				: new ResponseEntity<String>("Insert Fail", HttpStatus.BAD_REQUEST);
+	}
 	
 	
 }

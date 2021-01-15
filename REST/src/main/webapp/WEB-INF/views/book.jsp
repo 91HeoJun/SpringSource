@@ -112,14 +112,35 @@ $(function(){
 				$(".table").html(xhr.responseText);
 			}
 		})		
-
 	})
 	
 	// 도서정보 입력
 	$("#input").click(function(){
 		
-
+ 		let param = {
+			code : 1004,
+			title : 불금이면,
+			writer : 허준,
+			price : 500
+		}
+ 		
+ 		$.ajax({
+ 			url:"/new",
+			type:"post",
+ 			contentType:"application/json",
+ 			data:JSON.stringify(param),
+ 			
+			success:function(data) {
+				$(".table").html(data);
+			},
+			
+			error:function(xhr, txtStatus, error) {
+				$(".table").html(xhr.responseText);
+			}	
+ 		})
 	})
+	
+	
 
 	
 })

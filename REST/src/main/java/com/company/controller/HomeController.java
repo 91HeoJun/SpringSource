@@ -44,4 +44,26 @@ public class HomeController {
 		log.info("book.jsp 요청 ...");
 	}
 	
+	@GetMapping("/insert")
+	public String insertGet() {
+		log.info("Book_insert 요청");
+
+		return("book_insert");
+	}
+	
+	
+	@GetMapping("/step2")
+	public void registerGet() {
+		log.info("registe 요청 ...");
+	}
+	
+	@GetMapping("/changePwd")
+	public void pwdChageForm() {
+		log.info("pwd Chage Form 요청 ...");
+	}
+	
+	@GetMapping("/leave")
+	public void leaveForm() {
+		log.info("leave Form 요청 ...");
+	}
 }
