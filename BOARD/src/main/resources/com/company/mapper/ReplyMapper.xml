@@ -9,9 +9,13 @@
 	</insert>
 	
 	<delete id="delete">
-		delete from spring_reply where bno=#{bno}
+		delete from spring_reply where rno=#{rno}
 	</delete>
 
+	<update id="update">
+		update spring_reply set reply=#{reply}, updatedate=sysdate
+		where rno=#{rno}
+	</update>
 
 
 	<!-- 조회 및 페이지 나누기 관련 -->
@@ -33,9 +37,5 @@
 		select count(*) from spring_reply where bno=#{bno}
 	</select>
 	
-	<update id="update">
-		update spring_reply set reply=#{reply}, updatedate=sysdate
-		where rno=#{rno}
-	</update>
 
 </mapper>

@@ -29,21 +29,20 @@
                                         <th>수정일</th>
                                     </tr>									
                                 </thead>
-                                
+
                                <tbody>
 								<!-- 게시판 리스트 반복문 -->
 									<c:forEach var="vo" items="${list}">
 										<tr>
 											<td>${vo.bno}</td>
-											<td><a href="${vo.bno}" class="move">${vo.title}</a></td>
+											<td><a href="${vo.bno}" class="move">${vo.title}</a><strong> [${vo.replyCnt}]</strong></td>
 											<td>${vo.writer}</td>
 											<td><fmt:formatDate value="${vo.regdate}" pattern="yyyy-MM-dd HH:mm"/></td>
 											<td><fmt:formatDate value="${vo.updatedate}" pattern="yyyy-MM-dd HH:mm"/></td>
 										</tr>
 									</c:forEach>
 								</tbody>
-								
-								
+
                             </table>
 							<div class="row"> <!-- start search -->
                             	<div class="col-md-12">
@@ -63,14 +62,12 @@
 										<input type="hidden" name="pageNum" value="${pageVO.cri.pageNum}" />
 										<input type="hidden" name="amount" value="${pageVO.cri.amount}" />
 
-
-
 										<button type="button" class="btn btn-default">검색</button>       		
                             		</form>
-                            		
+
                             	   </div>
                             	   <div class="col-md-2 col-md-offset-2">
-                            	   
+
                             <!--페이지 목록 갯수 지정하는 폼-->
                             <select class="form-control" id="amount">
                             	<option value="10" <c:out value="${pageVO.cri.amount==10?'selected':''}"/>>10</option>
@@ -78,11 +75,11 @@
                             	<option value="30" <c:out value="${pageVO.cri.amount==30?'selected':''}"/>>30</option>
                             	<option value="40" <c:out value="${pageVO.cri.amount==40?'selected':''}"/>>40</option>
                             </select>
-                            
+
 								  </div>
                              	 </div>                             	 
                       		 </div><!-- end search -->
-                      		 
+
                             <!-- start Pagination -->
                             <div class="text-center">
                             	<ul class="pagination">
@@ -98,7 +95,7 @@
                             	</ul>
                             </div>
                             <!-- end Pagination -->   
-                            
+
                             </div>
                             <!-- end panel-body -->
                         </div>
@@ -114,7 +111,6 @@
 		<input type="hidden" name="type" value="${pageVO.cri.type}" />
 		<input type="hidden" name="keyword" value="${pageVO.cri.keyword}" />
 	</form>
-
 
 <!-- Modal 추가 -->
 	<div class="modal" tabindex="-1" id="myModal">

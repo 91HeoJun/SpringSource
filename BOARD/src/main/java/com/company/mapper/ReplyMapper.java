@@ -11,10 +11,10 @@ public interface ReplyMapper {
 	
 	public int insert(ReplyVO reVO);
 	public int update(ReplyVO reVO);
+	public int delete(int rno);
 	
 	public ReplyVO read(int rno);
 	public List<ReplyVO> list(@Param("cri")Criteria cri, @Param("bno") int bno);
 	public int countBno(int bno);
-	
-	
+
 }

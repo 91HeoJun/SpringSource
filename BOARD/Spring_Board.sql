@@ -11,8 +11,6 @@ alter table spring_board add constraint pk_spring_board primary key(bno);
 
 create sequence seq_board;
 
-select * from spring_board;
-
 select * from member;
 
 -- page 나누기 : rownum
@@ -115,4 +113,11 @@ create sequence seq_reply;
 create index idx_reply on spring_reply(bno desc, rno asc);
 
 
+-- 댓글 개수를 저장할 컬럼 생성(spring_board)
+alter table spring_board add(replyCnt number default 0);
+
+-- 이미 들어간 댓글 갯수 삽입
+update spring_board set replyCnt = (select count(rno) from spring_reply where spring_board.bno=spring_reply.bno);
+
+select * from spring_board;
 select * from spring_reply;

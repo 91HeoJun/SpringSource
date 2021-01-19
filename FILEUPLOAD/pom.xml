@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.company</groupId>
 	<artifactId>controller</artifactId>
-	<name>BOARD</name>
+	<name>FILEUPLOAD</name>
 	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
 
@@ -17,6 +17,21 @@
 	</properties>
 	
 	<dependencies>
+	
+		<!-- Apache Commons FileUpload : 파일 업로드 -->
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.4</version>
+		</dependency>
+	
+		<!-- javax activation : 파일 업로드 -->
+		<dependency>
+			<groupId>com.sun.activation</groupId>
+			<artifactId>javax.activation</artifactId>
+			<version>1.2.0</version>
+		</dependency>
+	
 		<!-- REST Converter - jackson-databind/dataformat -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
@@ -191,14 +206,15 @@
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
-	
+
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.7</version>
 			<scope>test</scope>
-		</dependency>        
+		</dependency>
+
 	</dependencies>
     <build>
         <plugins>
