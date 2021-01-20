@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link rel="stylesheet" href="/resources/css/mycss.css" />
 </head>
 <body>
 	
@@ -52,7 +53,7 @@ $(function() {
 			contentType:false, // 기본값 : application/x-www-form-urlcoded(파일첨부이므로, multipart/form-data로 보내야 함!)
 			data:formData,
 			success:function(result){
-				//console.log(result);
+				console.log(result);
 				showUploadedFile(result);
 			},
 			error:function(xhr, status, error){
@@ -72,16 +73,21 @@ $(function() {
         //결과를 보여줄 영역 가져오기
         var uploadResult = $(".uploadResult ul");
         var str = "";
-        $(uploadResultArr).each(function(idx,obj) {var i=0
-           str+="<li>"+obj.fileName+"</li>";
+        $(uploadResultArr).each(function(idx,obj) {	//var i=0
+        	if (obj.image) {
+        		// 썸네일 이미지 경로
+        		var fileCallpath = encodeURIComponent(obj.uploadPath+"\\s_"+obj.uuid+"_"+obj.fileName);
+        		str += "<li><img src='/display?fileName="+fileCallpath+"'><br />"+obj.fileName+"</li>";
+
+        	} else {
+        		str+="<li><img src='/resources/img/attach.png'><br />"+obj.fileName+"</li>";
+        	}
         });
         uploadResult.append(str);
      }
 	
 })
 
-
 </script>
-
 </body>
 </html>

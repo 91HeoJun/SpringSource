@@ -1,0 +1,33 @@
+@charset "UTF-8";
+
+body {
+	background-color: black;
+	
+}
+
+body h1 {
+	color: white;
+}
+
+.uploadDiv {
+	color: white;
+	border: medium;
+}
+
+.uploadResult {
+	width : 100%;
+	background-color: midnightblue;
+	color: white;
+}
+
+.uploadResult ul{
+	display: flex;
+	flex-flow: row;
+	justify-content: center;
+	align-items: center;
+}
+
+.uploadResult ul li {
+	list-style: none;
+	padding: 10px;
+}
