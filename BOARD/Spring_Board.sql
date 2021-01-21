@@ -121,3 +121,15 @@ update spring_board set replyCnt = (select count(rno) from spring_reply where sp
 
 select * from spring_board;
 select * from spring_reply;
+
+-- 파일첨부 테이블 생성
+create table spring_attach(
+	uuid varchar2(100) not null,
+	uploadPath varchar2(200) not null,
+	fileName varchar2(100) not null,
+	fileType char(1) not null,
+	bno number(10)
+);
+
+alter table spring_attach add constraint pk_attach primary key(bno);
+alter table spring_attach add constraint fk_board_attach foreign key(bno) references spring_board(bno);

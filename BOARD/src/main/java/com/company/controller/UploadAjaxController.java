@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -13,6 +15,8 @@ import java.util.UUID;
 
 import javax.activation.MimetypesFileTypeMap;
 
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,7 +34,7 @@ import net.coobird.thumbnailator.Thumbnailator;
 
 @Slf4j
 @Controller
-public class uploadAjaxController {
+public class UploadAjaxController {
 
 	@GetMapping("/uploadAjax")
 	public void uploadAjax() {
@@ -75,7 +79,7 @@ public class uploadAjaxController {
 
 				// 이미지인지 아닌지 여부 확인
 				if (checkImageType(saveFile)) {
-					attach.setImage(true);
+					attach.setFileType(true);
 					
 					// 이미지 일 경우 썸네일로 한번 더 저장
 					// c:\\upload\\2021\\01\\20, s_uuid_원본파일명
@@ -137,5 +141,55 @@ public class uploadAjaxController {
 		String str = sdf.format(date);	// 2021-01-20
 		return str.replace("-", File.separator);	// 2021\01\20
 		// 폴더 구분시 사용하는 문자 - windows: \, 리눅스: / 로 각각 다르므로  File.separator로 자동 조정 하는 법을 권장함.
+	}
+	
+	// -----------------------------------------------------------------------------------
+	// -------------------------------------- 다운로드 --------------------------------------
+	
+	@GetMapping(value="/download", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	public ResponseEntity<Resource> download(String fileName) {
+		log.info("다운로드 요청" + fileName);
+
+		Resource resource = new FileSystemResource("C:\\upload\\" + fileName);
+		
+		// uuid+fileName
+		String resourceUidName = resource.getFilename();
+		// uuid+fileName.subestring(uuid+fileName의 index로("_")를 지정하고 이후 +1개부터 컷
+		String resourceName = resourceUidName.substring(resourceUidName.indexOf("_")+1);
+		HttpHeaders headers = new HttpHeaders();
+
+		try {
+			headers.add("Content-Disposition", "attachment;filename=" + new String(resourceName.getBytes("utf-8"), "ISO-8859-1"));
+			
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+
+		return new ResponseEntity<Resource>(resource, headers, HttpStatus.OK);
+	}
+	// --------------------------------------------------------------------------------
+	// -------------------------------------- 삭제 --------------------------------------
+	
+	@PostMapping("/deleteFile")
+	public ResponseEntity<String> deleteFile(String fileName, String type) {
+		log.info("파일삭제 : " +fileName+ " 타입 : " +type);
+		try {
+			File file = new File("c:\\upload\\" + URLDecoder.decode(fileName, "utf-8"));
+			
+			// 파일(썸네일, 일반) 삭제
+			file.delete();
+			
+			if (type.equals("image")) { // 이미지일 경우 이미지 원본 삭제
+				String oriName = file.getAbsolutePath().replace("s_", "");
+				file = new File(oriName);
+				file.delete();
+			}
+			
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>("file", HttpStatus.NOT_FOUND);
+		}
+		
+		return new ResponseEntity<String>("success", HttpStatus.OK);
 	}
 }

@@ -17,6 +17,10 @@
 	<div class="uploadResult">
 		<ul></ul>
 	</div>
+	
+	<div class="bigPictureWrapper">
+		<div class="bigPicture"></div>
+	</div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 
@@ -75,19 +79,73 @@ $(function() {
         var str = "";
         $(uploadResultArr).each(function(idx,obj) {	//var i=0
         	if (obj.image) {
-        		// 썸네일 이미지 경로
+        		// 썸네일 파일 경로
         		var fileCallpath = encodeURIComponent(obj.uploadPath+"\\s_"+obj.uuid+"_"+obj.fileName);
-        		str += "<li><img src='/display?fileName="+fileCallpath+"'><br />"+obj.fileName+"</li>";
+        		
+        		// 원본 이미지 경로
+        		var originPath = obj.uploadPath+"\\"+obj.uuid+"_"+obj.fileName;
+        		originPath = originPath.replace(new RegExp(/\\/g),"/");
+        		
+        		str += "<li>";
+        		str += "<a href=\"javascript:showImage(\'"+originPath+"\')\">";
+        		str += "<img src='/display?fileName="+fileCallpath+"'>";
+        		str += "<br />"+obj.fileName+"</a>";
+        		str += "<span data-file='"+fileCallpath+"' data-type='image'> X </span>"
+        		str += "</li>";
 
         	} else {
-        		str+="<li><img src='/resources/img/attach.png'><br />"+obj.fileName+"</li>";
+        		// 일반 파일 경로
+        		var fileCallpath = encodeURIComponent(obj.uploadPath+"\\"+obj.uuid+"_"+obj.fileName);
+
+        		str += "<li><a href='/download?fileName="+ fileCallpath +"'>";
+        		str += "<img src='/resources/img/attach.png'><br />"+obj.fileName+"</a>";
+        		str += "<span data-file='"+fileCallpath+"' data-type='file'> X </span>"
+        		str += "</li>";
         	}
         });
         uploadResult.append(str);
      }
+    
+    // 열린 이미지 닫기
+    $(".bigPictureWrapper").click(function() {
+    	$(".bigPicture").animate({width: '0%', height: '0%'}, 1000);
+    	setTimeout(function() {
+			$(".bigPictureWrapper").hide();
+    	}, 1000);
+	})
 	
+	// X 버튼 클릭 - 이벤트 위임
+	$(".uploadResult").on("click", "span", function() {
+		
+		// 해당 파일 경로 / 타입 가져오기
+		var targetFile = $(this).data("file");
+		var targetType = $(this).data("type");
+		
+		// span 태그가 속한 부모 <li> 가져오기
+		var targetLi = $(this).closest("li");
+		
+		// 화면 목록에서 제거 / 서버 폴더에서 제거
+		$.ajax({
+			url: '/deleteFile',
+			type: 'post',
+			data: {
+				fileName: targetFile,
+				type: targetType
+			},
+			success: function(result) {
+				console.log(result);
+				targetLi.remove();
+			}
+		})
+	})
+    
 })
 
+// 이미지 열기 + 애니메이션
+function showImage(fileCallpath) {
+	$(".bigPictureWrapper").css("display", "flex").show();
+	$(".bigPicture").html("<img src='/display?fileName="+fileCallpath+"'>").animate({width: '100%', height: '100%'}, 1000);
+}
 </script>
 </body>
 </html>
