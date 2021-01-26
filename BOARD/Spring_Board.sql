@@ -119,8 +119,9 @@ alter table spring_board add(replyCnt number default 0);
 -- 이미 들어간 댓글 갯수 삽입
 update spring_board set replyCnt = (select count(rno) from spring_reply where spring_board.bno=spring_reply.bno);
 
-select * from spring_board;
+select * from spring_board order by bno desc;
 select * from spring_reply;
+select * from spring_attach;
 
 -- 파일첨부 테이블 생성
 create table spring_attach(
@@ -131,5 +132,5 @@ create table spring_attach(
 	bno number(10)
 );
 
-alter table spring_attach add constraint pk_attach primary key(bno);
+alter table spring_attach add constraint pk_attach primary key(uuid);
 alter table spring_attach add constraint fk_board_attach foreign key(bno) references spring_board(bno);

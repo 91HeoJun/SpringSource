@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.company.domain.BoardVO;
 import com.company.domain.Criteria;
+import com.company.domain.FileAttach;
 
 public interface BoardService {
 	
@@ -18,4 +19,7 @@ public interface BoardService {
 	
 	// 전체 게시물 수
 	public int getTotalCnt(Criteria cri);
+	
+	// 첨부물 전체 조회
+	public List<FileAttach> getAttachList(int bno);
 }

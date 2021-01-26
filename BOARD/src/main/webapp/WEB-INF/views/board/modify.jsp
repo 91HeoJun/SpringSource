@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
+<link rel="stylesheet" href="/resources/css/mycss.css" />
 <%@include file="../includes/header.jsp" %>
             <div class="row">
                 <div class="col-lg-12">
@@ -41,9 +41,30 @@
                 		</div>
                 	</div>
                 </div>
-            </div>            
-<%-- remove와 list를 위한 폼--%>
+            </div>
+            
+<%-- 첨부파일 보여주기 --%>
+<div class="bigPictureWrapper">
+	<div class="bigPicture"></div>
+</div>
 
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-default">
+			<div class="panel-heading"><i class="fa fas fa-file"></i> Files</div>
+			<div class="panel-body">
+				<div class="form-group uploadDiv">
+					<input type="file" name="uploadFile" id="" />
+				</div>
+				<div class="uploadResult">
+					<ul></ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<%-- remove와 list를 위한 폼--%>
 <!-- 페이지 나누기를 위한 세팅값 -->
 <form action="" id="myform" method="post">
 	<input type="hidden" name="bno" value="${getBoard.bno}" />
@@ -54,5 +75,8 @@
 </form>
 
 <%-- 스크립트 --%>
+<script>
+	let bnoVal = ${getBoard.bno};
+</script>
 <script src="/resources/js/modify.js"></script>
 <%@include file="../includes/footer.jsp" %>       

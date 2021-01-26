@@ -4,13 +4,18 @@
 
 	<!-- spring_attach에 insert -->
 	<insert id="insert">
-		insert into spring_attach values(#{uuid}, #{uploadPath}, #{fileName}, #{fileType} #{bno})
+		insert into spring_attach values(#{uuid}, #{uploadPath}, #{fileName}, #{fileType}, #{bno})
 	</insert>
+
+	<!-- spring_attach에 delete -->
+	<delete id="delete">
+		delete from spring_attach where bno = #{bno}
+	</delete>
 	
-	
-	
-	
-	
-	
-	
+	<!-- 어제 날짜의 첨부 리스트 가져오기 -->
+	<select id="getOldFiles" resultType="com.company.domain.FileAttach">
+		select * from spring_attach where uploadPath = to_char(sysdate-1, 'yyyy\mm\dd')
+	</select>
+
+
 </mapper>
