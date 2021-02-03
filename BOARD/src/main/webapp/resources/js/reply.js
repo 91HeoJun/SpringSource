@@ -12,6 +12,9 @@ var replyService = (function() {
 			url : '/replies/new',
 			contentType : 'application/json;charset=utf-8',
 			data:JSON.stringify(reply),
+			beforeSend:function(xhr) {
+				xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+			},
 			success:function(result) {
 				if(callback) {
 					callback(result);
@@ -39,12 +42,19 @@ var replyService = (function() {
 		})
 	} //getList end
 
-	function remove(rno, callback) {
-		console.log("remove 호출");
+	function remove(rno, replyer, callback) {
+		console.log("remove 호출"+replyer);
 
 		$.ajax({
 			url : '/replies/'+rno,
 			type : 'delete',
+			contentType : 'application/json;charset=utf-8',
+			beforeSend:function(xhr) {
+				xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+			},
+			data : JSON.stringify({
+				replyer:replyer
+			}),
 			success:function(result) {
 				if(callback) {
 					callback(result);
@@ -61,6 +71,9 @@ var replyService = (function() {
 			type : 'put',
 			contentType : 'application/json;charset=utf-8',
 			data:JSON.stringify(reply),
+			beforeSend:function(xhr) {
+				xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+			},
 			success:function(result) {
 				if(callback) {
 					callback(result);

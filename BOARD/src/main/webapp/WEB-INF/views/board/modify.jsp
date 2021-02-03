@@ -1,8 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <link rel="stylesheet" href="/resources/css/mycss.css" />
 <%@include file="../includes/header.jsp" %>
+
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header">Board Modify</h1>
@@ -33,9 +35,15 @@
                 				<div class="form-group">
                 					<label>Writer</label>
                 					<input class="form-control" name="writer" readonly="readonly" value="${getBoard.writer}">                				
-                				</div>  
-                				<button type="submit" data-oper='modify' class="btn btn-default">Modify</button>              			
-                				<button type="submit" data-oper='remove' class="btn btn-danger">Remove</button>              			
+                				</div>
+                				<sec:authentication property="principal" var="info"/>
+                				<sec:authorize access="isAuthenticated()">
+                						<c:if test="${info.username == getBoard.writer}">
+	                						<button type="submit" data-oper='modify' class="btn btn-default">Modify</button>              			
+    	            						<button type="submit" data-oper='remove' class="btn btn-danger">Remove</button>              			
+										</c:if>
+                				</sec:authorize>
+                				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 				<button type="submit" data-oper='list' class="btn btn-info">List</button>              			
                 			</form>
                 		</div>
@@ -72,11 +80,18 @@
 	<input type="hidden" name="amount" value="${cri.amount}" />	
 	<input type="hidden" name="type" value="${cri.type}" />
 	<input type="hidden" name="keyword" value="${cri.keyword}" />
+	<!-- 시큐리티를 위한 추가내용 -->
+	<input type="hidden" name="writer" value="${getBoard.writer}" />
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form>
 
 <%-- 스크립트 --%>
 <script>
 	let bnoVal = ${getBoard.bno};
+	
+	var csrfHeaderName = "${_csrf.headerName}";
+	var csrfTokenValue = "${_csrf.token}";
 </script>
+
 <script src="/resources/js/modify.js"></script>
 <%@include file="../includes/footer.jsp" %>       

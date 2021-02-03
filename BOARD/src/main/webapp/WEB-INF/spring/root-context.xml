@@ -47,4 +47,6 @@
 		<property name="dataSource" ref="ds"/>
 	</bean>
 	
+	<tx:annotation-driven/>
+	
 </beans>

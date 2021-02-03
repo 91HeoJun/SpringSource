@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,13 +36,14 @@ public class BoardController {
 	private BoardService service;
 	
 	// 게시글 작성폼으로 이동
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/register")
 	public void register() {
 		log.info("---- 입력 페이지로 이동중 .... ----");
 	}
 	
 	// 게시글 작성
-
+	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/register")
 	public String registerPost(BoardVO board, RedirectAttributes rttr) {
 		log.info("---- 삽입 작업 실행중 .... ----" + board);
@@ -83,8 +85,9 @@ public class BoardController {
 		
 		model.addAttribute("getBoard", getBoard);
 	}
-	
+
 	@PostMapping("/modify")
+	@PreAuthorize("#board.writer == principal.username") // 작성자와 로그인한 정보가 같은지 재확인
 	public String modify(BoardVO board, Criteria cri, RedirectAttributes rttr) {
 		log.info("---- 수정 실행중 .... ----" + board);
 		log.info("board : " + board);
@@ -106,8 +109,10 @@ public class BoardController {
 		return "redirect:list";
 	}
 	
+
 	@PostMapping("/remove")
-	public String removePost(int bno, Criteria cri, RedirectAttributes rttr) {
+	@PreAuthorize("#writer == principal.username") // 작성자와 로그인한 정보가 같은지 재확인(String writer는 modify.jsp에서 가져옴)
+	public String removePost(int bno, Criteria cri, RedirectAttributes rttr, String writer) {
 		log.info("---- 게시물 삭제중 .... ----");
 
 		// 게시물 번호에 해당하는 첨부파일 삭제(서버 폴더 내 파일 삭제  & DB에서 내용 삭제 )
